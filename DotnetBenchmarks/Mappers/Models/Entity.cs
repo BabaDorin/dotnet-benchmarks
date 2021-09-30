@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Mapster;
+using System;
 using System.Collections.Generic;
 
 namespace Mappers.Models
 {
+    [AdaptTo(typeof(EntityDto)), GenerateMapper] // <= Used by Mapster for code generation
     public class Entity
     {
         public string P1 { get; set; }

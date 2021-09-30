@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Mapster;
 
 namespace Mappers.Models
 {
+    [AdaptTo(typeof(Option)), GenerateMapper] // <= Used by Mapster for code generation
     public class Option
     {
         public string Label { get; set; }
