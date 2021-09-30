@@ -18,6 +18,7 @@ namespace Mappers.Mappers
         public EntityDto Map(Entity entity)
         {
             return entity.AdaptToDto();
+            //return null;
         }
     }
 }
