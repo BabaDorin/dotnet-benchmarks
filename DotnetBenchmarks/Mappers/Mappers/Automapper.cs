@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Mappers.Models;
-using System.Collections.Generic;
 
 namespace Mappers.Mappers
 {

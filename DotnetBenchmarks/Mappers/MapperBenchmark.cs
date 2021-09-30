@@ -3,9 +3,6 @@ using Mappers.Mappers;
 using Mappers.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mappers
 {
@@ -14,24 +11,31 @@ namespace Mappers
     [RankColumn]
     public class MapperBenchmark
     {
-        static readonly Entity entity = Entity.Mock();
-
         static readonly Automapper autoMapper = new();
         static readonly ManualMapper manualMapper = new();
         static readonly Mappers.Mapster mapster = new();
         static readonly AgileMapper agileMapper = new();
         static readonly TinyMapper tinyMapper = new();
         static readonly Mappers.ExpressMapper expressMapper = new();
+        static readonly MapsterCodeGen mapsterCodeGen = new();
 
-        public void Run()
+        static readonly Entity entity = new Entity
         {
-            AutoMapper();
-            Manual();
-            AgileMapper();
-            Mapster();
-            TinyMapper();
-            ExpressMapper();
-        }
+            P1 = "Hello World",
+            P2 = 420,
+            P3 = 420,
+            P4 = DateTime.UtcNow,
+            P5 = 420,
+            ListProp = new List<Option>()
+                {
+                    new Option(),
+                    new Option(),
+                    new Option(),
+                    new Option(),
+                    new Option(),
+                },
+            ObjProp = new Option()
+        };
 
         [Benchmark]
         public void AutoMapper()
@@ -87,33 +91,13 @@ namespace Mappers
             expressMapper.Map(entity);
         }
 
-        private void CheckIfDeepCopy(Entity entity, EntityDto entityDto)
+        [Benchmark]
+        public void MapsterCodeGen()
         {
-            bool listDeepCopied = true;
-            bool objectDeepCopied = true;
+            //Console.WriteLine("\nMapsterCodeGen");
+            //CheckIfDeepCopy(entity, mapsterCodeGen.Map(entity));
 
-            if(entity.ListProp == entityDto.ListProp)
-            {
-                Console.WriteLine("entity.ListProp == entityDto.ListProp");
-                listDeepCopied = false;
-            }
-
-            for (int i = 0; i < entityDto.ListProp.Count; i++)
-            {
-                if(entity.ListProp[i] == entityDto.ListProp[i])
-                {
-                    Console.WriteLine($"entity.ListProp[{i}] == entityDto.ListProp[{i}]");
-                    listDeepCopied = false;
-                }
-            }
-
-            if (entity.ObjProp == entityDto.ObjProp)
-            {
-                Console.WriteLine("entity.ObjProp == entityDto.ObjProp");
-                objectDeepCopied = false;
-            }
-
-            Console.WriteLine($"\nSummary: List deep copied: {listDeepCopied}, object deep copied: {objectDeepCopied}");
+            mapsterCodeGen.Map(entity);
         }
     }
 }
