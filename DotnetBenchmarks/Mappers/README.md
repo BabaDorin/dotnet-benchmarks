@@ -13,10 +13,10 @@
 [5]: <https://www.nuget.org/packages/ExpressMapper.Core/>
 
 ---
-*The following benchmarks have been run on .NET 5.0.10 Runtime with the folliwing CPU characteristics: Intel Core i5-8250U 1.60GHz (Kaby Lake R), 1 CPU, 8 logical and 4 physical cores.*
+*Runtime: .NET 5.0.10, CPU characteristics: Intel Core i5-8250U 1.60GHz (Kaby Lake R), 1 CPU, 8 logical and 4 physical cores.*
 
 Three benchmarks have been performed upon the mapping techniques from above:
-- Map a small entity containing 6 properties (string, int, float, double, DateTime, List<Option>, Option) to a DTO having the same structure (Option is another entity having 2 properties of type string: Label and Value). The DTO is expected to be a **deep copy** of original entity aka Entity.Option != EntityDto.Option).
+- Map a small entity with 6 properties (string, int, float, double, DateTime, List<Option>, Option) to a DTO having the same structure (Option is another entity having 2 properties of type string: Label and Value). The DTO is expected to be a **deep copy** of original entity aka Entity.Option != EntityDto.Option).
 - Map a large entity containing 1000 properties (the same properties as in the first case, but multiplied). The same rules apply here.
 - Map a large number (1.000.000) of small entities (6 props). The same rules apply here. 
 
@@ -219,7 +219,7 @@ var dto = Mapper.Map(entity).ToANew<EntityDto>();
 
 # End note
 Benchmarking tool: [BenchmarkDotNet][7]
-  
+
 [7]: <https://benchmarkdotnet.org/>
   
-> If you have any concerns regarding these benchmarks, feel free to create an issue.
+> If you have any concerns regarding these benchmarks, feel free to create an issue. Also, note that the results depend on model's nature and you might get different outcome for a more complex dto, which most probably will imply additional mapper configuration <= an aspect that has not been covered by these benchmarks.
