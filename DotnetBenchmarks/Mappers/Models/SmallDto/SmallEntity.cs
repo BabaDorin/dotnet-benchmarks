@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Mappers.Models.Shared;
+using Mapster;
+using System;
 using System.Collections.Generic;
 
-namespace Mappers.Models
+namespace Mappers.Models.SmallDto
 {
-    public class EntityDto
+    [AdaptTo(typeof(SmallDto)), GenerateMapper] // <= Used by Mapster for code generation
+    public class SmallEntity
     {
         public string P1 { get; set; }
         public int P2 { get; set; }
