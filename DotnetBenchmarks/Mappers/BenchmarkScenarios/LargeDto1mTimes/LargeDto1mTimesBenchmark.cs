@@ -26,8 +26,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto1mTimes
         [IterationTime(100)]
         public void AutoMapper()
         {
-            //Console.WriteLine("\nAutoMapper:");
-            //CheckIfDeepCopy(entity, autoMapper.Map(entity));
             for(int i = 0; i < n; i++)
                 autoMapper.Map(entity);
         }
@@ -36,8 +34,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto1mTimes
         [IterationTime(100)]
         public void Manual()
         {
-            //Console.WriteLine("\nManual:");
-            //CheckIfDeepCopy(entity, manualMapper.Map(entity));
             for(int i = 0; i < n; i++)
                 manualMapper.Map(entity);
         }
@@ -46,8 +42,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto1mTimes
         [IterationTime(100)]
         public void Mapster()
         {
-            //Console.WriteLine("\nMapster:");
-            //CheckIfDeepCopy(entity, mapster.Map(entity));
             for(int i = 0; i < n; i++)
                 mapster.Map(entity);
         }
@@ -56,8 +50,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto1mTimes
         [IterationTime(100)]
         public void AgileMapper()
         {
-            //Console.WriteLine("\nAgileMapper:");
-            //CheckIfDeepCopy(entity, agileMapper.Map(entity));
             for(int i = 0; i < n; i++)
                 agileMapper.Map(entity);
         }
@@ -66,8 +58,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto1mTimes
         [IterationTime(100)]
         public void TinyMapper()
         {
-            //Console.WriteLine("\nTinyMapper:");
-            //CheckIfDeepCopy(entity, tinyMapper.Map(entity));
             for(int i = 0; i < n; i++)
                 tinyMapper.Map(entity);
         }
@@ -76,8 +66,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto1mTimes
         [IterationTime(100)]
         public void ExpressMapper()
         {
-            //Console.WriteLine("\nExpressMapper");
-            //CheckIfDeepCopy(entity, expressMapper.Map(entity));
             for(int i = 0; i < n; i++)
                 expressMapper.Map(entity);
         }
@@ -86,8 +74,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto1mTimes
         [IterationTime(100)]
         public void MapsterCodeGen()
         {
-            //Console.WriteLine("\nMapsterCodeGen");
-            //CheckIfDeepCopy(entity, mapsterCodeGen.Map(entity));
             for(int i = 0; i < n; i++)
                 mapsterCodeGen.Map(entity);
         }

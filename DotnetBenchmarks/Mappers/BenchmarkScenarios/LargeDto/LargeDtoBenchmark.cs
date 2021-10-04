@@ -23,8 +23,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto
         [IterationTime(100)]
         public void AutoMapper()
         {
-            //Console.WriteLine("\nAutoMapper:");
-            //CheckIfDeepCopy(entity, autoMapper.Map(entity));
             autoMapper.Map(entity);
         }
 
@@ -32,8 +30,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto
         [IterationTime(100)]
         public void Manual()
         {
-            //Console.WriteLine("\nManual:");
-            //CheckIfDeepCopy(entity, manualMapper.Map(entity));
             manualMapper.Map(entity);
         }
 
@@ -41,8 +37,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto
         [IterationTime(100)]
         public void Mapster()
         {
-            //Console.WriteLine("\nMapster:");
-            //CheckIfDeepCopy(entity, mapster.Map(entity));
             mapster.Map(entity);
         }
 
@@ -50,8 +44,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto
         [IterationTime(100)]
         public void AgileMapper()
         {
-            //Console.WriteLine("\nAgileMapper:");
-            //CheckIfDeepCopy(entity, agileMapper.Map(entity));
             agileMapper.Map(entity);
         }
 
@@ -59,8 +51,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto
         [IterationTime(100)]
         public void TinyMapper()
         {
-            //Console.WriteLine("\nTinyMapper:");
-            //CheckIfDeepCopy(entity, tinyMapper.Map(entity));
             tinyMapper.Map(entity);
         }
 
@@ -68,8 +58,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto
         [IterationTime(100)]
         public void ExpressMapper()
         {
-            //Console.WriteLine("\nExpressMapper");
-            //CheckIfDeepCopy(entity, expressMapper.Map(entity));
             expressMapper.Map(entity);
         }
 
@@ -77,8 +65,6 @@ namespace Mappers.BenchmarkScenarios.LargeDto
         [IterationTime(100)]
         public void MapsterCodeGen()
         {
-            //Console.WriteLine("\nMapsterCodeGen");
-            //CheckIfDeepCopy(entity, mapsterCodeGen.Map(entity));
             mapsterCodeGen.Map(entity);
         }
     }
