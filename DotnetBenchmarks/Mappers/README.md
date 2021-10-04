@@ -15,10 +15,11 @@
 ---
 *Runtime: .NET 5.0.10, CPU characteristics: Intel Core i5-8250U 1.60GHz (Kaby Lake R), 1 CPU, 8 logical and 4 physical cores.*
 
-Three benchmarks have been performed upon the mapping techniques from above:
-- Map a small entity with 6 properties (string, int, float, double, DateTime, List<Option>, Option) to a DTO having the same structure (Option is another entity having 2 properties of type string: Label and Value). The DTO is expected to be a **deep copy** of original entity aka Entity.Option != EntityDto.Option).
-- Map a large entity containing 1000 properties (the same properties as in the first case, but multiplied). The same rules apply here.
-- Map a large number (1.000.000) of small entities (6 props). The same rules apply here. 
+Four benchmarks have been performed upon the mapping techniques from above:
+- Map a small entity with 6 properties (string, int, float, double, DateTime, List<Option>, Option) to a DTO having the same structure (Option is another entity having 2 properties of type string: Label and Value). The DTO is expected to be a **deep copy** of original entity aka Entity.Option != EntityDto.Option);
+- Map 1 million of small entities;
+- Map a large entity containing 200 properties (150 strings + 50 composite objects (with depth of 4 levels)) 
+- Map 1 million of large entities
 
 ## Mapping small entities
 Both Entity and EntityDto models have the following structure:
@@ -33,54 +34,53 @@ public Option ObjProp { get; set; }
 ```
 
 Mapping Entity to EntityDto (deep copy) - Benchmark results:
-|         Method |        Mean |      Error |       StdDev |      Median | Rank |  Gen 0 | Allocated |
-|--------------- |------------:|-----------:|-------------:|------------:|-----:|-------:|----------:|
-| MapsterCodeGen |    90.06 ns |   1.265 ns |     1.184 ns |    89.54 ns |    1 | 0.1122 |     352 B |
-|         Manual |   124.63 ns |   2.361 ns |     4.073 ns |   123.23 ns |    2 | 0.1376 |     432 B |
-|        Mapster |   129.20 ns |   2.522 ns |     3.098 ns |   127.69 ns |    3 | 0.1121 |     352 B |
-|     AutoMapper |   309.08 ns |   5.529 ns |     5.171 ns |   309.40 ns |    4 | 0.1373 |     432 B |
-|  ExpressMapper |   348.53 ns |   1.041 ns |     0.922 ns |   348.84 ns |    5 | 0.1936 |     608 B |
-|     TinyMapper |   407.31 ns |   7.945 ns |     7.432 ns |   403.21 ns |    6 | 0.1502 |     472 B |
-|    AgileMapper | 6,689.13 ns | 924.696 ns | 2,608.122 ns | 5,400.00 ns |    7 |      - |     616 B |
+|         Method |      Mean |    Error |    StdDev |    Median | Rank |  Gen 0 | Allocated |
+|--------------- |----------:|---------:|----------:|----------:|-----:|-------:|----------:|
+| MapsterCodeGen |  90.25 ns | 0.546 ns |  0.484 ns |  90.17 ns |    1 | 0.1119 |     352 B |
+|         Manual | 122.84 ns | 2.136 ns |  1.894 ns | 122.48 ns |    2 | 0.1370 |     432 B |
+|        Mapster | 132.66 ns | 2.404 ns |  4.334 ns | 131.50 ns |    3 | 0.1115 |     352 B |
+|     AutoMapper | 291.92 ns | 5.847 ns |  5.743 ns | 292.24 ns |    4 | 0.1366 |     432 B |
+|    AgileMapper | 294.25 ns | 5.176 ns |  4.842 ns | 294.87 ns |    4 | 0.1937 |     616 B |
+|  ExpressMapper | 346.35 ns | 3.119 ns |  2.765 ns | 345.73 ns |    5 | 0.1924 |     608 B |
+|     TinyMapper | 415.88 ns | 8.299 ns | 21.423 ns | 404.79 ns |    6 | 0.1476 |     472 B |
 
-![](https://i.imgur.com/as1t6Xg.png)
+## Mapping 1 million of small entities
 
-
-## Mapping LARGE entities
-You're free to create your own definition of 'large' entity :) it might contain 50, 100, or 500 properties (horizontally expansion) or a lot of nested objects (vertically expansion). 
-These are the results of mapping an entity with about 1k properties (int, double, float, string, DateTime, List, custom Type) to a DTO with the same specifications. *There is a separate branch for this benchmark.*
-|         Method |      Mean |     Error |     StdDev |    Median | Rank |   Gen 0 | Allocated |
-|--------------- |----------:|----------:|-----------:|----------:|-----:|--------:|----------:|
-|    AgileMapper |  69.08 us |  1.061 us |   0.941 us |  69.02 us |    1 | 15.3809 |     47 KB |
-|        Mapster |  87.70 us |  9.933 us |  28.499 us |  72.60 us |    1 |       - |     47 KB |
-| MapsterCodeGen |  98.27 us |  7.729 us |  21.545 us |  92.25 us |    2 |       - |     47 KB |
-|  ExpressMapper | 108.80 us |  0.330 us |   0.258 us | 108.86 us |    3 | 25.1465 |     77 KB |
-|         Manual | 130.85 us | 21.646 us |  62.453 us |  98.50 us |    3 |       - |     58 KB |
-|     TinyMapper | 206.14 us | 34.776 us | 101.442 us | 155.30 us |    4 |       - |     64 KB |
-|     AutoMapper | 232.26 us | 17.171 us |  48.432 us | 213.45 us |    5 |       - |     58 KB |
-
-![](https://i.imgur.com/dRbUDHr.png)
-
-Surprisingly enough, AgileMapper (the least efficient from the previous benchmark) seems to be the most efficient when it comes to mapping large objects, even more efficient than Manual Mapping (you probably won't have to map objects with so many properties tho :) It is interesting to know that, in such cases, reflection might overtake manual mapping from the performance point of view.
-
-Down below is an aproximation on how mappers' performance varies depending on the number of properties.
-![](https://i.imgur.com/MCFYOjO.png)
-  
-# Mapping a large amount of small entities
-Benchmarking rules for this case: Map 1 000 000 entities (entities' structures are specified in the first benchmark).
 |         Method |      Mean |    Error |   StdDev | Rank |       Gen 0 | Allocated |
 |--------------- |----------:|---------:|---------:|-----:|------------:|----------:|
-| MapsterCodeGen |  90.35 ms | 0.555 ms | 0.492 ms |    1 | 112000.0000 |    336 MB |
-|        Mapster | 126.43 ms | 0.723 ms | 0.603 ms |    2 | 112000.0000 |    336 MB |
-|         Manual | 132.96 ms | 2.636 ms | 5.203 ms |    3 | 137000.0000 |    412 MB |
-|    AgileMapper | 282.92 ms | 2.482 ms | 2.073 ms |    4 | 196000.0000 |    587 MB |
-|     AutoMapper | 292.23 ms | 5.743 ms | 7.861 ms |    5 | 137000.0000 |    412 MB |
-|  ExpressMapper | 353.75 ms | 1.272 ms | 1.128 ms |    6 | 193000.0000 |    580 MB |
-|     TinyMapper | 409.35 ms | 7.554 ms | 6.308 ms |    7 | 150000.0000 |    450 MB |
+| MapsterCodeGen |  95.77 ms | 0.571 ms | 0.477 ms |    1 | 112000.0000 |    336 MB |
+|         Manual | 128.19 ms | 2.557 ms | 3.140 ms |    2 | 137000.0000 |    412 MB |
+|        Mapster | 128.70 ms | 2.148 ms | 2.009 ms |    2 | 112000.0000 |    336 MB |
+|    AgileMapper | 283.71 ms | 5.570 ms | 8.165 ms |    3 | 196000.0000 |    587 MB |
+|     AutoMapper | 284.78 ms | 5.041 ms | 4.210 ms |    3 | 137000.0000 |    412 MB |
+|  ExpressMapper | 347.60 ms | 6.927 ms | 6.804 ms |    4 | 193000.0000 |    580 MB |
+|     TinyMapper | 396.22 ms | 2.476 ms | 1.933 ms |    5 | 150000.0000 |    450 MB |
+	
+## Mapping LARGE entities
 
+These are the results of mapping an entity with 200 properties (strings and nested objects) to a DTO with the same specifications.
+	
+|         Method |      Mean |     Error |    StdDev |    Median | Rank |   Gen 0 | Allocated |
+|--------------- |----------:|----------:|----------:|----------:|-----:|--------:|----------:|
+| MapsterCodeGen |  4.478 us | 0.0895 us | 0.2092 us |  4.370 us |    1 |  3.0582 |      9 KB |
+|     TinyMapper |  4.681 us | 0.0711 us | 0.0594 us |  4.674 us |    2 |  3.0591 |      9 KB |
+|        Mapster |  4.812 us | 0.0909 us | 0.1773 us |  4.763 us |    2 |  3.0610 |      9 KB |
+|         Manual |  9.828 us | 0.1207 us | 0.1008 us |  9.838 us |    3 |  2.9809 |      9 KB |
+|  ExpressMapper | 30.060 us | 0.5701 us | 0.4760 us | 30.102 us |    4 |  4.9650 |     15 KB |
+|    AgileMapper | 31.266 us | 0.5477 us | 0.4855 us | 31.114 us |    5 | 11.5132 |     35 KB |
+|     AutoMapper | 64.534 us | 0.7431 us | 0.6205 us | 64.478 us |    6 | 12.1173 |     37 KB |
   
-![](https://i.imgur.com/CBIifPW.png)
-  
+## Mapping 1 million of large entities
+
+|         Method |     Mean |    Error |   StdDev | Rank |         Gen 0 |     Gen 1 | Allocated |
+|--------------- |---------:|---------:|---------:|-----:|--------------:|----------:|----------:|
+| MapsterCodeGen |  4.282 s | 0.0243 s | 0.0203 s |    1 |  3065000.0000 |         - |      9 GB |
+|        Mapster |  4.379 s | 0.0070 s | 0.0055 s |    2 |  3065000.0000 |         - |      9 GB |
+|     TinyMapper |  4.532 s | 0.0136 s | 0.0114 s |    3 |  3065000.0000 |         - |      9 GB |
+|         Manual |  9.889 s | 0.0501 s | 0.0444 s |    4 |  3065000.0000 |         - |      9 GB |
+|  ExpressMapper | 30.527 s | 0.1528 s | 0.1429 s |    5 |  4991000.0000 | 3000.0000 |     15 GB |
+|    AgileMapper | 34.159 s | 0.2031 s | 0.1801 s |    6 | 11527000.0000 | 3000.0000 |     34 GB |
+|     AutoMapper | 63.510 s | 0.2733 s | 0.2557 s |    7 | 12160000.0000 | 6000.0000 |     36 GB |
 
 # Details
 ## MapsterCodeGen
